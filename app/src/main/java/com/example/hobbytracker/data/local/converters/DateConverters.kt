@@ -1,16 +1,15 @@
 package com.example.hobbytracker.data.local.converters
 
 import androidx.room.TypeConverter
-import java.util.Date
-
+import java.time.LocalDateTime
 class DateConverters {
     @TypeConverter
-    fun fromTimeStamp(value:Long?): Date?{
-        return value?.let { Date(it) }
+    fun fromTimestamp(value: String?): LocalDateTime? {
+        return value?.let { LocalDateTime.parse(it) }
     }
 
     @TypeConverter
-    fun dateToTimestamp(date: Date?): Long?{
-        return date?.time
+    fun dateToTimestamp(date: LocalDateTime?): String? {
+        return date?.toString()
     }
 }

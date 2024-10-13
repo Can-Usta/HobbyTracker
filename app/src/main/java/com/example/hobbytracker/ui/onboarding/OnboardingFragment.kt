@@ -21,7 +21,8 @@ class OnboardingFragment : Fragment() {
 
         binding.apply {
             getStartedButton.setOnClickListener {
-                findNavController().navigate(R.id.action_onboardingFragment_to_homeFragment)
+                val action = OnboardingFragmentDirections.actionOnboardingFragmentToHomeFragment()
+                findNavController().navigate(action)
             }
         }
         return binding.root

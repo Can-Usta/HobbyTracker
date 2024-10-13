@@ -19,5 +19,13 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.hobbytracker.ui.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_hobbyAddFragment"
+            app:destination="@id/hobbyAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hobbyAddFragment"
+        android:name="com.example.hobbytracker.ui.hobby_add.HobbyAddFragment"
+        android:label="HobbyAddFragment" />
 </navigation>
