@@ -8,4 +8,9 @@
     <string name="let_s_get_started">Let\'s Get Started</string>
     <string name="add_hobby_button_content_description">Add Hobby Button</string>
     <string name="save_button_text">Save</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="hobby_title">Hobby Title</string>
+    <string name="description">Description</string>
+    <string name="welcome">Welcome</string>
 </resources>

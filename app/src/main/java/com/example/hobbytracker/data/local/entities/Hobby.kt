@@ -15,6 +15,8 @@ data class Hobby(
     var description : String,
     var date : LocalDateTime
 ): Parcelable{
-    val createdDateFormatted: String
-        get() = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+    val dateFormatted: String
+        get() = date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+    val timeFormatted : String
+        get() = date.format(DateTimeFormatter.ofPattern("HH:mm"))
 }
