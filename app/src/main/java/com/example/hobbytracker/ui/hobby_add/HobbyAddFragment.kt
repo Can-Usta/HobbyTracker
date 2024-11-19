@@ -17,9 +17,11 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.hobbytracker.R
 import com.example.hobbytracker.databinding.FragmentHobbyAddBinding
 import com.example.hobbytracker.receivers.HobbyAlarmReceiver
+import com.example.hobbytracker.ui.home.HomeFragmentViewModel
 import com.example.hobbytracker.utils.DatePickerHelper
 import com.example.hobbytracker.utils.TimePickerHelper
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +35,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HobbyAddFragment : Fragment() {
     private lateinit var binding: FragmentHobbyAddBinding
-    private val viewModel: HobbyAddViewModel by viewModels()
+    private val viewModel: HomeFragmentViewModel by viewModels()
 
     @Inject
     lateinit var datePickerHelper: DatePickerHelper
@@ -67,8 +69,10 @@ class HobbyAddFragment : Fragment() {
                     LocalDate.parse(hobbyDateTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
                 val hobbyTime =
                     LocalTime.parse(hobbyTimeTV.text, DateTimeFormatter.ofPattern("HH:mm"))
-
                 val hobbyDateTime = LocalDateTime.of(hobbyDate, hobbyTime)
+
+                loadingScreen.visibility= View.VISIBLE
+                hobbyAddProgressBar.visibility= View.VISIBLE
 
                 viewModel.saveHobbyToDB(
                     hobbyTitle = hobbyTitle,
@@ -76,6 +80,17 @@ class HobbyAddFragment : Fragment() {
                     hobbyDate = hobbyDateTime
                 )
                 setHobbyAlarm(hobbyTitle, hobbyDateTime)
+                root.postDelayed({
+                    hobbyAddProgressBar.visibility = View.GONE
+
+                    savedTextView.visibility = View.VISIBLE
+
+                    root.postDelayed({
+                        val action = HobbyAddFragmentDirections.actionHobbyAddFragmentToHomeFragment()
+                        findNavController().navigate(action)
+                    }, 1000)
+                }, 1000)
+
             }
         }
         return binding.root
@@ -96,15 +111,11 @@ class HobbyAddFragment : Fragment() {
 
             }
         }
-
-        // İzin verilmişse veya Android 13'ten düşük bir sürümse, alarmı ayarla
         scheduleAlarm(hobbyTitle, hobbyDate)
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestNotificationPermission() {
-
-        // İzin isteğini doğrudan başlat
         ActivityCompat.requestPermissions(
             requireActivity(),
             arrayOf(Manifest.permission.POST_NOTIFICATIONS),
@@ -127,7 +138,7 @@ class HobbyAddFragment : Fragment() {
         )
         val alarmTimeInMillis = hobbyDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         alarmManager.set(
-            AlarmManager.RTC_WAKEUP,alarmTimeInMillis,
+            AlarmManager.RTC_WAKEUP, alarmTimeInMillis,
             pendingIntent
         )
     }

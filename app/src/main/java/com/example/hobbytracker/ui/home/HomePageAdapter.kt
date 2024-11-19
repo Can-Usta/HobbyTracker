@@ -8,7 +8,7 @@ import com.example.hobbytracker.R
 import com.example.hobbytracker.data.local.entities.Hobby
 import com.example.hobbytracker.databinding.HobbyItemBinding
 
-class HomePageAdapter(private val hobbies : List<Hobby>) : RecyclerView.Adapter<HomePageAdapter.HomeViewHolder>(){
+class HomePageAdapter(private var hobbies : List<Hobby>) : RecyclerView.Adapter<HomePageAdapter.HomeViewHolder>(){
     inner class HomeViewHolder(var bind : HobbyItemBinding) : RecyclerView.ViewHolder(bind.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
@@ -28,6 +28,9 @@ class HomePageAdapter(private val hobbies : List<Hobby>) : RecyclerView.Adapter<
             hobbyDateTV.text = hobby.dateFormatted
             hobbyTimeTV.text = hobby.timeFormatted
         }
-
+    }
+    fun updateHobbies(newHobbies: List<Hobby>){
+        this.hobbies = newHobbies
+        notifyDataSetChanged()
     }
 }

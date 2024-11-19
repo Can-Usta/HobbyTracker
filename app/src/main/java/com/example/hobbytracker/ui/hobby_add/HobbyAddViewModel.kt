@@ -14,14 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HobbyAddViewModel @Inject constructor(private val repository: HobbyRepository) : ViewModel() {
 
-    fun saveHobbyToDB(hobbyTitle : String, hobbyDescription: String, hobbyDate: LocalDateTime){
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                val newHobby = Hobby( title = hobbyTitle, description = hobbyDescription, date = hobbyDate)
-                repository.insertHobby(newHobby)
-            }
 
-        }
-    }
 
 }

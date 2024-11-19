@@ -86,11 +86,50 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textSize="20sp"
             android:hint="@string/date"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/hobbyDateView"
             app:layout_constraintStart_toStartOf="@+id/hobbyDateView"
             app:layout_constraintTop_toTopOf="@+id/hobbyDateView" />
+
+        <ProgressBar
+            android:id="@+id/hobbyAddProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/black"
+            android:scaleX="2.5"
+            android:scaleY="2.5"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/loadingScreen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#825E5E5E"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/savedTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/saved"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="35sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/hobbySaveButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/hobbyTimeView"
+            app:layout_constraintVertical_bias="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

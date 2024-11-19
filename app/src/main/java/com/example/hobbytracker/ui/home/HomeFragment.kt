@@ -58,8 +58,7 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.hobby.collect { hobbies ->
-                hobbyAdapter = HomePageAdapter(hobbies)
-                binding.recyclerView.adapter = hobbyAdapter
+                hobbyAdapter.updateHobbies(hobbies)
             }
         }
     }

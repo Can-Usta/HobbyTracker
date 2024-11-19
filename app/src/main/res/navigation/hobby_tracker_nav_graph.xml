@@ -27,5 +27,11 @@
     <fragment
         android:id="@+id/hobbyAddFragment"
         android:name="com.example.hobbytracker.ui.hobby_add.HobbyAddFragment"
-        android:label="HobbyAddFragment" />
+        android:label="HobbyAddFragment" >
+        <action
+            android:id="@+id/action_hobbyAddFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
