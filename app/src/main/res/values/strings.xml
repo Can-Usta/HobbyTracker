@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="onboarding_image">OnBoarding Image</string>
     <string name="welcome_to_hobby_tracker">Welcome to Hobby Tracker</string>
-    <string name="hobby_tracker_onboarding_description">Welcome to the Hobby Tracker App, where managing and enjoying your hobbies becomes simple and fun. Easily add your favorite hobbies, track your progress, and set reminders to stay consistent with your goals. Whether you\'re discovering new interests or developing existing ones, this app helps you stay organized and motivated. Explore popular hobbies, track your achievements, and watch your personal growth unfold. Ready to dive into your passions and start making progress?</string>
+    <string name="hobby_tracker_onboarding_description">Welcome to the Hobby Tracker App, where managing and enjoying your hobbies becomes simple and fun. Easily add your favorite hobbies, track your progress, and set reminders to stay consistent with your goals. Ready to dive into your passions and start making progress?</string>
     <string name="let_s_get_started">Let\'s Get Started</string>
     <string name="add_hobby_button_content_description">Add Hobby Button</string>
     <string name="save_button_text">Save</string>
@@ -14,4 +14,5 @@
     <string name="description">Description</string>
     <string name="welcome">Welcome</string>
     <string name="saved">Saved!</string>
+    <string name="update">Update</string>
 </resources>

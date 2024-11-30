@@ -17,4 +17,15 @@ class HobbyRepository @Inject constructor(private val hobbyDao: HobbyTrackerDao)
         val response = hobbyDao.getHobbies()
         emit(response)
     }.flowOn(Dispatchers.IO)
+
+    fun getHobbyById(hobbyId: Int): Flow<Hobby?> = flow {
+        val hobby = hobbyDao.getHobbyById(hobbyId)
+        emit(hobby)
+    }.flowOn(Dispatchers.IO)
+
+    fun updateHobby(hobby: Hobby){
+        hobbyDao.updateHobby(hobby)
+    }
+
+
 }

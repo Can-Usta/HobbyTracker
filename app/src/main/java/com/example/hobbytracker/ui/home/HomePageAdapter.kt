@@ -3,6 +3,7 @@ package com.example.hobbytracker.ui.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hobbytracker.R
 import com.example.hobbytracker.data.local.entities.Hobby
@@ -27,6 +28,10 @@ class HomePageAdapter(private var hobbies : List<Hobby>) : RecyclerView.Adapter<
             hobbyDescTV.text = hobby.description
             hobbyDateTV.text = hobby.dateFormatted
             hobbyTimeTV.text = hobby.timeFormatted
+            hobbyUpdateButton.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToHobbyUpdateFragment(hobby.id)
+                it.findNavController().navigate(action)
+            }
         }
     }
     fun updateHobbies(newHobbies: List<Hobby>){
