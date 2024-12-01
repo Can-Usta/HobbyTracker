@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="hobby"
+            type="com.example.hobbytracker.data.local.entities.Hobby" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +24,8 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@{hobby.title}"/>
 
         <EditText
             android:id="@+id/hobbyUpdateDescriptionET"
@@ -34,7 +37,8 @@
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hobbyUpdateTitleET" />
+            app:layout_constraintTop_toBottomOf="@+id/hobbyUpdateTitleET"
+            android:text="@{hobby.description}"/>
 
         <View
             android:id="@+id/hobbyUpdateDateView"
@@ -78,7 +82,8 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/hobbyUpdateTimeView"
             app:layout_constraintStart_toStartOf="@+id/hobbyUpdateTimeView"
-            app:layout_constraintTop_toTopOf="@+id/hobbyUpdateTimeView" />
+            app:layout_constraintTop_toTopOf="@+id/hobbyUpdateTimeView"
+            android:text="@{hobby.timeFormatted}"/>
 
         <TextView
             android:id="@+id/hobbyUpdateDateTV"
@@ -89,7 +94,8 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/hobbyUpdateDateView"
             app:layout_constraintStart_toStartOf="@+id/hobbyUpdateDateView"
-            app:layout_constraintTop_toTopOf="@+id/hobbyUpdateDateView" />
+            app:layout_constraintTop_toTopOf="@+id/hobbyUpdateDateView"
+            android:text="@{hobby.dateFormatted}"/>
 
         <ProgressBar
             android:id="@+id/hobbyUpdateProgressBar"
