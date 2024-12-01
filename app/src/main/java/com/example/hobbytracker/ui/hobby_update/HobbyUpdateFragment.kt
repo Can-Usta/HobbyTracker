@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -41,60 +42,94 @@ class HobbyUpdateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_hobby_update, container, false)
-        Log.d("TAG", "hobbyId:${args.hobbyId}")
-        if(args.hobbyId!=0){
-            viewModel.getHobbyById(args.hobbyId)
-            lifecycleScope.launch {
-                viewModel.hobby.collect { hobby ->
-                    hobby?.let {
-                        binding.hobbyUpdateTitleET.setText(it.title)
-                        binding.hobbyUpdateDescriptionET.setText(it.description)
-                        binding.hobbyUpdateDateTV.text = it.dateFormatted
-                        binding.hobbyUpdateTimeTV.text = it.timeFormatted
-                    }
+        setupIU()
+        observeViewModel()
+        return binding.root
+    }
+
+    private fun setupIU() {
+        binding.apply {
+            hobbyUpdateDateView.setOnClickListener { showDatePicker() }
+            hobbyUpdateTimeView.setOnClickListener { showTimePicker() }
+            hobbyUpdateSaveButton.setOnClickListener { onSaveClicked() }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.getHobbyById(args.hobbyId)
+        lifecycleScope.launch {
+            viewModel.hobby.collect { hobby ->
+                hobby?.let {
+                    binding.hobby = it
                 }
             }
         }
+    }
+
+    private fun showDatePicker(){
+        datePickerHelper.showDatePickerDialog { selectedDate ->
+            binding.hobbyUpdateDateTV.text =
+                selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        }
+    }
+    private fun showTimePicker(){
+        timePickerHelper.showTimePickerDialog { selectedTime ->
+            binding.hobbyUpdateTimeTV.text =
+                selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+        }
+    }
+    private fun onSaveClicked() {
+        val updatedHobby = getUpdatedHobby()
+        updatedHobby?.let {
+            viewModel.updateHobby(it)
+            showLoading()
+            navigateToHomeWithDelay()
+        }
+    }
+
+    private fun getUpdatedHobby(): Hobby? {
+        val title = binding.hobbyUpdateTitleET.text.toString()
+        val description = binding.hobbyUpdateDescriptionET.text.toString()
+
+        val dateText = binding.hobbyUpdateDateTV.text.toString()
+        val timeText = binding.hobbyUpdateTimeTV.text.toString()
+
+        if (title.isBlank() || description.isBlank() || dateText.isBlank() || timeText.isBlank()) {
+            Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            return null
+        }
+
+        val hobbyDate = LocalDate.parse(dateText, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        val hobbyTime = LocalTime.parse(timeText, DateTimeFormatter.ofPattern("HH:mm"))
+        val hobbyDateTime = LocalDateTime.of(hobbyDate, hobbyTime)
+
+        return Hobby(
+            id = args.hobbyId,
+            title = title,
+            description = description,
+            date = hobbyDateTime
+        )
+    }
+
+    private fun showLoading() {
         binding.apply {
-            hobbyUpdateDateView.setOnClickListener {
-                datePickerHelper.showDatePickerDialog { selectedDate ->
-                    hobbyUpdateDateTV.text =
-                        selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                }
-            }
-            hobbyUpdateTimeView.setOnClickListener {
-                timePickerHelper.showTimePickerDialog { selectedTime ->
-                    hobbyUpdateTimeTV.text = selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-                }
-            }
+            loadingUpdateScreen.visibility = View.VISIBLE
+            hobbyUpdateProgressBar.visibility = View.VISIBLE
+        }
+    }
 
-            hobbyUpdateSaveButton.setOnClickListener {
-                val title = hobbyUpdateTitleET.text.toString()
-                val description = hobbyUpdateDescriptionET.text.toString()
-                val hobbyDate = LocalDate.parse(hobbyUpdateDateTV.text, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                val hobbyTime = LocalTime.parse(hobbyUpdateTimeTV.text, DateTimeFormatter.ofPattern("HH:mm"))
-                val hobbyDateTime = LocalDateTime.of(hobbyDate,hobbyTime)
-
-                val newHobby = Hobby(id = args.hobbyId, title = title, description = description, date = hobbyDateTime)
-                viewModel.updateHobby(newHobby)
-
-                loadingUpdateScreen.visibility= View.VISIBLE
-                hobbyUpdateProgressBar.visibility= View.VISIBLE
+    private fun navigateToHomeWithDelay() {
+        binding.apply {
+            root.postDelayed({
+                hobbyUpdateProgressBar.visibility = View.GONE
+                updatedTextView.visibility = View.VISIBLE
 
                 root.postDelayed({
-                    hobbyUpdateProgressBar.visibility = View.GONE
-
-                    updatedTextView.visibility = View.VISIBLE
-
-                    root.postDelayed({
-                        val action = HobbyUpdateFragmentDirections.actionHobbyUpdateFragmentToHomeFragment()
-                        findNavController().navigate(action)
-                    }, 1000)
+                    val action = HobbyUpdateFragmentDirections.actionHobbyUpdateFragmentToHomeFragment()
+                    findNavController().navigate(action)
                 }, 1000)
-            }
+            }, 1000)
         }
-
-        return binding.root
     }
 
 }
