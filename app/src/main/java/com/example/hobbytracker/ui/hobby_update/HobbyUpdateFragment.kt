@@ -66,49 +66,33 @@ class HobbyUpdateFragment : Fragment() {
         }
     }
 
-    private fun showDatePicker(){
+    private fun showDatePicker() {
         datePickerHelper.showDatePickerDialog { selectedDate ->
             binding.hobbyUpdateDateTV.text =
                 selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         }
     }
-    private fun showTimePicker(){
+
+    private fun showTimePicker() {
         timePickerHelper.showTimePickerDialog { selectedTime ->
             binding.hobbyUpdateTimeTV.text =
                 selectedTime.format(DateTimeFormatter.ofPattern("HH:mm"))
         }
     }
-    private fun onSaveClicked() {
-        val updatedHobby = getUpdatedHobby()
-        updatedHobby?.let {
-            viewModel.updateHobby(it)
-            showLoading()
-            navigateToHomeWithDelay()
-        }
-    }
 
-    private fun getUpdatedHobby(): Hobby? {
+    private fun onSaveClicked() {
         val title = binding.hobbyUpdateTitleET.text.toString()
         val description = binding.hobbyUpdateDescriptionET.text.toString()
 
         val dateText = binding.hobbyUpdateDateTV.text.toString()
         val timeText = binding.hobbyUpdateTimeTV.text.toString()
-
-        if (title.isBlank() || description.isBlank() || dateText.isBlank() || timeText.isBlank()) {
-            Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            return null
+        val updatedHobby =
+            viewModel.getUpdatedHobby(args.hobbyId, title, description, dateText, timeText)
+        updatedHobby?.let {
+            viewModel.updateHobby(it)
+            showLoading()
+            navigateToHomeWithDelay()
         }
-
-        val hobbyDate = LocalDate.parse(dateText, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-        val hobbyTime = LocalTime.parse(timeText, DateTimeFormatter.ofPattern("HH:mm"))
-        val hobbyDateTime = LocalDateTime.of(hobbyDate, hobbyTime)
-
-        return Hobby(
-            id = args.hobbyId,
-            title = title,
-            description = description,
-            date = hobbyDateTime
-        )
     }
 
     private fun showLoading() {
@@ -125,7 +109,8 @@ class HobbyUpdateFragment : Fragment() {
                 updatedTextView.visibility = View.VISIBLE
 
                 root.postDelayed({
-                    val action = HobbyUpdateFragmentDirections.actionHobbyUpdateFragmentToHomeFragment()
+                    val action =
+                        HobbyUpdateFragmentDirections.actionHobbyUpdateFragmentToHomeFragment()
                     findNavController().navigate(action)
                 }, 1000)
             }, 1000)
