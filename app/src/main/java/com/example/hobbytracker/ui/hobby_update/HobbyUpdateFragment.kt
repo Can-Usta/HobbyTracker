@@ -1,11 +1,9 @@
 package com.example.hobbytracker.ui.hobby_update
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -13,15 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.hobbytracker.R
-import com.example.hobbytracker.data.local.entities.Hobby
 import com.example.hobbytracker.databinding.FragmentHobbyUpdateBinding
 import com.example.hobbytracker.utils.DatePickerHelper
 import com.example.hobbytracker.utils.TimePickerHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -106,6 +100,11 @@ class HobbyUpdateFragment : Fragment() {
         binding.apply {
             root.postDelayed({
                 hobbyUpdateProgressBar.visibility = View.GONE
+                lifecycleScope.launch {
+                    viewModel.alertMessage.collect{message->
+                        updatedTextView.text = message
+                    }
+                }
                 updatedTextView.visibility = View.VISIBLE
 
                 root.postDelayed({

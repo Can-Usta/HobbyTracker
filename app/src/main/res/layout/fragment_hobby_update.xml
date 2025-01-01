@@ -127,13 +127,13 @@
             android:layout_height="wrap_content"
             android:text="@string/saved"
             android:textColor="@color/white"
-            android:textStyle="bold"
             android:textSize="35sp"
+            android:gravity="center"
+            android:textStyle="bold"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/hobbyUpdateSaveButton"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hobbyUpdateTimeView"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

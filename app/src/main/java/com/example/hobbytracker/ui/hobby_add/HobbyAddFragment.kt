@@ -1,10 +1,6 @@
 package com.example.hobbytracker.ui.hobby_add
 
 import android.Manifest
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -20,7 +16,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.hobbytracker.R
 import com.example.hobbytracker.databinding.FragmentHobbyAddBinding
-import com.example.hobbytracker.receivers.HobbyAlarmReceiver
 import com.example.hobbytracker.ui.home.HomeFragmentViewModel
 import com.example.hobbytracker.utils.DatePickerHelper
 import com.example.hobbytracker.utils.TimePickerHelper
@@ -28,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -71,8 +65,8 @@ class HobbyAddFragment : Fragment() {
                     LocalTime.parse(hobbyTimeTV.text, DateTimeFormatter.ofPattern("HH:mm"))
                 val hobbyDateTime = LocalDateTime.of(hobbyDate, hobbyTime)
 
-                loadingScreen.visibility= View.VISIBLE
-                hobbyAddProgressBar.visibility= View.VISIBLE
+                loadingScreen.visibility = View.VISIBLE
+                hobbyAddProgressBar.visibility = View.VISIBLE
 
                 viewModel.saveHobbyToDB(
                     hobbyTitle = hobbyTitle,
@@ -86,7 +80,8 @@ class HobbyAddFragment : Fragment() {
                     savedTextView.visibility = View.VISIBLE
 
                     root.postDelayed({
-                        val action = HobbyAddFragmentDirections.actionHobbyAddFragmentToHomeFragment()
+                        val action =
+                            HobbyAddFragmentDirections.actionHobbyAddFragmentToHomeFragment()
                         findNavController().navigate(action)
                     }, 1000)
                 }, 1000)
@@ -111,7 +106,7 @@ class HobbyAddFragment : Fragment() {
 
             }
         }
-        scheduleAlarm(hobbyTitle, hobbyDate)
+        viewModel.scheduleHobbyAlarm(hobbyTitle, hobbyDate, requireContext())
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -120,26 +115,6 @@ class HobbyAddFragment : Fragment() {
             requireActivity(),
             arrayOf(Manifest.permission.POST_NOTIFICATIONS),
             1
-        )
-    }
-
-
-    private fun scheduleAlarm(hobbyTitle: String, hobbyDate: LocalDateTime) {
-        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(requireContext(), HobbyAlarmReceiver::class.java).apply {
-            putExtra("notificationId", hobbyDate.hashCode())
-            putExtra("hobbyTitle", hobbyTitle)
-        }
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            hobbyDate.hashCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val alarmTimeInMillis = hobbyDate.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        alarmManager.set(
-            AlarmManager.RTC_WAKEUP, alarmTimeInMillis,
-            pendingIntent
         )
     }
 }

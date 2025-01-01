@@ -19,5 +19,5 @@ interface HobbyTrackerDao {
     fun getHobbyById(hobbyId: Int): Hobby?
 
     @Update
-    fun updateHobby(hobby: Hobby)
+    fun updateHobby(hobby: Hobby): Int
 }

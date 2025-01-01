@@ -23,9 +23,16 @@ class HobbyRepository @Inject constructor(private val hobbyDao: HobbyTrackerDao)
         emit(hobby)
     }.flowOn(Dispatchers.IO)
 
-    fun updateHobby(hobby: Hobby){
-        hobbyDao.updateHobby(hobby)
-    }
+    fun updateHobby(hobby: Hobby): Flow<Boolean> = flow {
+        try {
+            val rowsUpdated = hobbyDao.updateHobby(hobby)
+            if (rowsUpdated > 0) {
+                emit(true)
+            }
+        } catch (e: Exception) {
+            emit(false) // Bir hata oluşursa false döner
+        }
+    }.flowOn(Dispatchers.IO)
 
 
 }

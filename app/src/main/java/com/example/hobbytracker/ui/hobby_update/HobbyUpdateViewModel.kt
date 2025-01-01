@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.hobbytracker.data.local.entities.Hobby
 import com.example.hobbytracker.data.local.repositories.HobbyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,6 +19,8 @@ class HobbyUpdateViewModel @Inject constructor(private val hobbyRepository: Hobb
     ViewModel() {
     private val _hobby = MutableStateFlow<Hobby?>(null)
     val hobby: StateFlow<Hobby?> = _hobby
+    private val _alertMessage = MutableStateFlow<String?>(null)
+    val alertMessage: StateFlow<String?> = _alertMessage
 
     fun getHobbyById(hobbyId: Int) {
         viewModelScope.launch {
@@ -30,8 +31,15 @@ class HobbyUpdateViewModel @Inject constructor(private val hobbyRepository: Hobb
     }
 
     fun updateHobby(hobby: Hobby) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             hobbyRepository.updateHobby(hobby)
+                .collect { success ->
+                    if (success) {
+                        _alertMessage.value = "Hobby Updated Successfully!"
+                    } else {
+                        _alertMessage.value = "Failed to Update Hobby!"
+                    }
+                }
         }
     }
 
